@@ -2,14 +2,19 @@
 	def is_alpine:
 		env.variant | startswith("alpine")
 	;
+	def is_ubuntu:
+		env.variant | startswith("ubuntu")
+	;
 	def is_slim:
-		env.variant | startswith("slim-")
+		(env.variant | startswith("slim-")) or (env.variant | startswith("ubuntu"))
 	;
 	def rcVersion:
 		env.version | rtrimstr("-rc")
 -}}
 {{ if is_alpine then ( -}}
 FROM alpine:{{ env.variant | ltrimstr("alpine") }}
+{{ ) elif is_ubuntu then ( -}}
+FROM ubuntu:{{ env.variant | ltrimstr("ubuntu") }}
 {{ ) elif is_slim then ( -}}
 FROM debian:{{ env.variant | ltrimstr("slim-") }}-slim
 {{ ) else ( -}}
